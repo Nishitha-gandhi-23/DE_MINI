@@ -1,31 +1,28 @@
-WITH churn_customers AS (
-    SELECT
+WITH last_trans AS(
+    SELECT 
         customer_id,
-        previous_month,
+        product_id,
+        product_family,
+        product_sub_family,
         payment_month,
-        revenue_type,
-        year(payment_month) AS year,
-        {{ datediff('previous_month','payment_month') }} AS difference,
-        CASE
-            WHEN difference>31 THEN 'churned'
-            ELSE 'not churned'
-        END AS churned_or_not
+        MAX(payment_month) AS lasttrans
     FROM
-        {{ ref('int_prod_trans') }}
-    WHERE
-        revenue_type=1
-)
- 
-SELECT
-    year,
-    MONTH(payment_month) as month,
-    COUNT(customer_id) AS number_of_churned_customers,
-FROM  
-    churn_customers
-WHERE
-    churned_or_not='churned'
-GROUP BY
-    year,month
-ORDER BY
-    year,month
- 
+        {{ref("final_join")}}
+    GROUP BY 
+        customer_id,
+        product_id,
+        product_family,
+        product_sub_family,
+        payment_month
+),
+lead_gen AS(
+    SELECT 
+        lasttrans,
+        customer_id,
+        product_id,
+        product_family,
+        product_sub_family,
+        payment_month,
+        lead(payment_month) over(partition by customer_id order by payment_month) as leads from last_trans  )
+        
+SELECT customer_id,product_id,product_family,payment_month,leads,lasttrans from lead_gen where leads is null order by customer_id 

@@ -1,0 +1,25 @@
+version: 2
+ 
+sources:
+  - name: final  
+    schema: final  
+    database: FOOD_DELIVERY  
+    tables:
+      - name: KPI_Churn_NewCustomer  
+        description: "Final Number of churned and new customers over time data "
+ 
+      - name: KPI_ProductChurn
+        description: "Final product churn data"
+ 
+      - name: KPI_fiscal_year
+        description: "Finl fiscal year data"
+
+      - name: KPI_RevenueLost
+        description: "Final Revenue lost due to contraction over time"
+ 
+      - name: KPI_Customer_Revenue
+        description: "Final Ranking of  customer based on Revenue data"
+ 
+      - name: KPI_Product_Revenue
+        description: "Final Ranking of product based on Revenue data"
+ 

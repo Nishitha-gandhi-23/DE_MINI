@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: raw
+    database: FOOD_DELIVERY
+    schema: RAW_DATA
+    tables:
+      - name: TRANSACTIONS
+      - name: PRODUCTS
+      - name: CUSTOMERS
+      - name: COUNTRY
+
+  # - name: Staging
+  #   database: FOOD_DELIVERY
+  #   schema: STAGING
+
+  # - name: Transform
+  #   database: FOOD_DELIVERY
+  #   schema: TRANSFORM
+
+  # - name: Final
+  #   database: FOOD_DELIVERY
+  #   schema: FINAL
+
+

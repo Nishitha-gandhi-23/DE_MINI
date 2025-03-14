@@ -1,0 +1,31 @@
+-- SELECT 
+--     PRODUCT_ID,
+--     PRODUCT_FAMILY,
+--     PRODUCT_SUB_FAMILY,
+--     SUM(REVENUE) AS TOTAL_REVENUE,
+--     RANK() OVER (ORDER BY SUM(REVENUE) DESC) AS REVENUE_RANK
+-- FROM 
+--     FOOD_DELIVERY.TRANSFORM.FINAL_JOIN
+-- GROUP BY 
+--     PRODUCT_ID, PRODUCT_FAMILY, PRODUCT_SUB_FAMILY
+-- ORDER BY 
+--     REVENUE_RANK;
+
+WITH product_revenue AS (
+    SELECT 
+        PRODUCT_ID,
+        PRODUCT_FAMILY,
+        PRODUCT_SUB_FAMILY,
+        SUM(REVENUE) AS total_revenue
+    FROM {{ ref('final_join') }} 
+    WHERE REVENUE_TYPE=1
+    GROUP BY PRODUCT_ID,PRODUCT_FAMILY,PRODUCT_SUB_FAMILY
+
+)
+SELECT 
+    PRODUCT_ID,
+    PRODUCT_FAMILY,
+    PRODUCT_SUB_FAMILY,
+    total_revenue,
+    RANK() OVER (ORDER BY total_revenue DESC) AS revenue_rank
+FROM product_revenue
